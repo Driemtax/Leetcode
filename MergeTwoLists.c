@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct
 {
@@ -36,11 +37,30 @@ int getVal(ListNode *head, short index)
 
 void AddNode(ListNode **head, int val)
 {
+    ListNode *newNode = (ListNode *)malloc(sizeof(ListNode));
+    newNode->val = val;
+    newNode->next = NULL;
+
+    if (*head == NULL)
+    {
+        *head = newNode;
+    }
+    else
+    {
+        ListNode *temp = *head;
+
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+
+        temp->next = newNode;
+    }
 }
 
 struct ListNode *mergeTwoLists(struct ListNode *list1, struct ListNode *list2)
 {
-    ListNode *resultList = NULL;
+    ListNode *resultList = (ListNode *)malloc(sizeof(ListNode));
 
     short len1 = getLength(list1);
     short len2 = getLength(list2);
@@ -54,13 +74,31 @@ struct ListNode *mergeTwoLists(struct ListNode *list1, struct ListNode *list2)
         int rghtVal = getVal(list2, right_idx);
         if (lftVal <= rghtVal)
         {
-            resultList->val = lftVal;
+            AddNode(resultList, lftVal);
             left_idx += 1;
         }
         else
         {
-            resultList->val = rghtVal;
+            AddNode(resultList, rghtVal);
             right_idx += 1;
         }
     }
+
+    // Check if Elements are left in the original lists and add them to the resultList
+    // List1
+    while (left_idx < len1)
+    {
+        int lftVal = getVal(list1, left_idx);
+        AddNode(resultList, lftVal);
+        left_idx += 1;
+    }
+    // List2
+    while (right_idx < len2)
+    {
+        int rghtVal = getVal(list2, right_idx);
+        AddNode(resultList, rghtVal);
+        right_idx += 1;
+    }
+
+    return resultList;
 }
