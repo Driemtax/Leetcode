@@ -12,9 +12,11 @@ struct ListNode
 short getLength(ListNode *head)
 {
     short counter = 0;
-    while (head->next != NULL)
+    while (head != NULL)
     {
         counter++;
+        head = head->next;
+
     }
 
     return counter;
@@ -25,16 +27,21 @@ int getVal(ListNode *head, short index)
     int val = 0;
     short counter = 0;
 
-    ListNode *temp;
+    ListNode *temp = head;
 
-    while (counter != index)
+    while (counter != index && temp != NULL)
     {
-        temp = head->next;
+        temp = temp->next;
+        counter++;
     }
 
-    val = temp->val;
+    if (temp != NULL)
+    {
+        return temp->val;
+    }
+    
 
-    return val;
+    return -1;
 }
 
 void AddNode(ListNode **head, int val)
@@ -62,7 +69,7 @@ void AddNode(ListNode **head, int val)
 
 struct ListNode *mergeTwoLists(struct ListNode *list1, struct ListNode *list2)
 {
-    ListNode *resultList = (ListNode *)malloc(sizeof(ListNode));
+    ListNode *resultList = NULL;
 
     short len1 = getLength(list1);
     short len2 = getLength(list2);
@@ -76,12 +83,12 @@ struct ListNode *mergeTwoLists(struct ListNode *list1, struct ListNode *list2)
         int rghtVal = getVal(list2, right_idx);
         if (lftVal <= rghtVal)
         {
-            AddNode(resultList, lftVal);
+            AddNode(&resultList, lftVal);
             left_idx += 1;
         }
         else
         {
-            AddNode(resultList, rghtVal);
+            AddNode(&resultList, rghtVal);
             right_idx += 1;
         }
     }
@@ -91,16 +98,38 @@ struct ListNode *mergeTwoLists(struct ListNode *list1, struct ListNode *list2)
     while (left_idx < len1)
     {
         int lftVal = getVal(list1, left_idx);
-        AddNode(resultList, lftVal);
+        AddNode(&resultList, lftVal);
         left_idx += 1;
     }
     // List2
     while (right_idx < len2)
     {
         int rghtVal = getVal(list2, right_idx);
-        AddNode(resultList, rghtVal);
+        AddNode(&resultList, rghtVal);
         right_idx += 1;
     }
 
     return resultList;
+}
+
+int main(){
+    ListNode *list1 = NULL;
+    AddNode(&list1, 1);
+    AddNode(&list1, 2);
+    AddNode(&list1, 4);
+
+    ListNode *list2 = NULL;
+    AddNode(&list2, 1);
+    AddNode(&list2, 3);
+    AddNode(&list2, 4);
+
+    ListNode *finalList = mergeTwoLists(list1, list2);
+
+    for (short i = 0; i < 6; i++)
+    {
+        int val = getVal(finalList, i);
+        printf("Value at %d: ", i);
+        printf("%d\n", val);
+    }
+    
 }
