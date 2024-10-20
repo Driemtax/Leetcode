@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct
+typedef struct ListNode ListNode; // Vorwärtsdeklaration
+
+struct ListNode
 {
     int val;
-    ListNode *next;
-} ListNode;
+    ListNode *next; // Jetzt ist ListNode bekannt
+};
 
 short getLength(ListNode *head)
 {
