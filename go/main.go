@@ -3,8 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	nums := []int{1, 2, 3, 5, 6, 7, 8}
-	target := 4
-	index := searchInsert(nums, target)
-	fmt.Println(index)
+	test := []string{"Hello World", "   fly me   to   the moon  ", "luffy is still joyboy", "Test"}
+	for _, s := range test {
+		index := lengthOfLastWord(s)
+		fmt.Println(index)
+	}
 }
