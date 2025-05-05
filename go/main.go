@@ -3,9 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	test := []string{"Hello World", "   fly me   to   the moon  ", "luffy is still joyboy", "Test"}
-	for _, s := range test {
-		index := lengthOfLastWord(s)
-		fmt.Println(index)
-	}
+	test1 := "1010"
+	test2 := "1011"
+	sum := addBinary(test2, test1)
+	fmt.Println(sum)
 }
