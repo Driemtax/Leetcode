@@ -38,13 +38,13 @@ func delNodes(root *TreeNode, to_delete []int) []*TreeNode {
 
 		// case node is to be deleted
 		if deleted {
-			// add children to result as new roots
-			if node.Left != nil {
-				result = append(result, node.Left)
-			}
-			if node.Right != nil {
-				result = append(result, node.Right)
-			}
+			// // add children to result as new roots
+			// if node.Left != nil {
+			// 	result = append(result, node.Left)
+			// }
+			// if node.Right != nil {
+			// 	result = append(result, node.Right)
+			// }
 			// delete node by setting nil to the parent
 			return nil
 		}
