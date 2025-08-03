@@ -17,100 +17,47 @@ type TreeNode struct {
 
 func delNodes(root *TreeNode, to_delete []int) []*TreeNode {
 	result := []*TreeNode{}
-	// iterate backwards over to_delete, since higher nodes have a higher probability to be a node without children in a bineary tree
-	for i := len(to_delete) - 1; i >= 0; i-- {
-		to_del := to_delete[i]
 
-		// find node to delete
-		nodeToDelete := findNode(root, to_del) // nil if node not found -> skip to_delete[i]
-		if nodeToDelete == nil {
-			continue
-		}
-
-		// special case root == nodeToDelete
-		if root == nodeToDelete {
-			// add children to result
-			if root.Left != nil {
-				result = append(result, root.Left)
-			}
-			if root.Right != nil {
-				result = append(result, root.Right)
-			}
-
-			root = nil
-			continue
-		}
-
-		// find parent and delete connection
-		parent := findParent(root, nodeToDelete)
-		if parent != nil {
-			// add children to result
-			if nodeToDelete.Left != nil {
-				result = append(result, nodeToDelete.Left)
-			}
-			if nodeToDelete.Right != nil {
-				result = append(result, nodeToDelete.Right)
-			}
-
-			// now "delete" node through deleting the connection to parent
-			if parent.Left == nodeToDelete {
-				parent.Left = nil
-			} else if parent.Right == nodeToDelete {
-				parent.Right = nil
-			}
-		}
-
+	deleteSet := make(map[int]bool)
+	for _, val := range to_delete {
+		deleteSet[val] = true
 	}
 
-	// add the remaining nodes from the original tree that still have a connection to root
-	if root != nil {
-		result = append(result, root)
+	var dfs func(*TreeNode, bool) *TreeNode
+	dfs = func(node *TreeNode, isRoot bool) *TreeNode {
+		if node == nil {
+			return nil
+		}
+
+		// check if current node is to be deleted
+		deleted := deleteSet[node.Val]
+
+		// recursivly travel through the children (this implements reverse dfs)
+		node.Left = dfs(node.Left, deleted)
+		node.Right = dfs(node.Right, deleted)
+
+		// case node is to be deleted
+		if deleted {
+			// add children to result as new roots
+			if node.Left != nil {
+				result = append(result, node.Left)
+			}
+			if node.Right != nil {
+				result = append(result, node.Right)
+			}
+			// delete node by setting nil to the parent
+			return nil
+		}
+
+		// if node is a new root and will not be deleted
+		if isRoot {
+			result = append(result, node)
+		}
+
+		// if we reach this we traverse backwards through the stack trace
+		return node
 	}
 
+	dfs(root, true)
 	return result
-}
-
-func findNode(root *TreeNode, target int) *TreeNode {
-	if root == nil {
-		return nil
-	}
-
-	if root.Val == target {
-		return root
-	}
-
-	// Look through left half
-	if leftResult := findNode(root.Left, target); leftResult != nil {
-		return leftResult
-	}
-
-	// look trough right half
-	if rightResult := findNode(root.Right, target); rightResult != nil {
-		return rightResult
-	}
-
-	return nil
-}
-
-func findParent(root *TreeNode, target *TreeNode) *TreeNode {
-	if root == nil || target == nil {
-		return nil
-	}
-
-	// Prüfe ob target ein direktes Kind von root ist
-	if root.Left == target || root.Right == target {
-		return root
-	}
-
-	// Suche rekursiv im linken Teilbaum
-	if leftResult := findParent(root.Left, target); leftResult != nil {
-		return leftResult
-	}
-
-	// Suche rekursiv im rechten Teilbaum
-	if rightResult := findParent(root.Right, target); rightResult != nil {
-		return rightResult
-	}
-
-	return nil
 }
