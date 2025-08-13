@@ -3,14 +3,16 @@ package main
 import "fmt"
 
 func main() {
-	matrix1 := [][]int{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}
-	target1 := 3
+	roman1 := "III"
+	roman2 := "LVIII"
+	roman3 := "MCMXCIV"
 
-	result1 := searchMatrix(matrix1, target1)
-	fmt.Println("Result1: ", result1)
+	out1 := romanToInt(roman1)
+	out2 := romanToInt(roman2)
+	out3 := romanToInt(roman3)
 
-	target2 := 13
+	fmt.Println("1: ", out1)
+	fmt.Println("2: ", out2)
+	fmt.Println("3: ", out3)
 
-	result2 := searchMatrix(matrix1, target2)
-	fmt.Println("Result2: ", result2)
 }
